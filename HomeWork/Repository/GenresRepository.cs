@@ -8,7 +8,13 @@ namespace HomeWork.Repository
 {
     public class GenresRepository : IGenresRepository
     {
-        private readonly HomeWorkEntitiesContext _db = new HomeWorkEntitiesContext();
+        private readonly HomeWorkEntitiesContext _db;
+
+        public GenresRepository()
+        {
+            _db = new HomeWorkEntitiesContext();
+        }
+
         public Genres GetById(int id)
         {
             return _db.Genres.Find(id);

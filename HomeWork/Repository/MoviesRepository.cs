@@ -8,7 +8,14 @@ namespace HomeWork.Repository
 {
     public class MoviesRepository : IMoviesRepository
     {
-        private readonly HomeWorkEntitiesContext _db = new HomeWorkEntitiesContext();
+        private readonly HomeWorkEntitiesContext _db;
+
+        public MoviesRepository()
+        {
+            _db = new HomeWorkEntitiesContext();
+        }
+
+
         public Movies GetById(int id)
         {
             return _db.Movies.Find(id);

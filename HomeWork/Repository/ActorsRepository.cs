@@ -8,7 +8,13 @@ namespace HomeWork.Repository
 {
     public class ActorsRepository : IActorsRepository
     {
-        private readonly HomeWorkEntitiesContext _db = new HomeWorkEntitiesContext();
+        private readonly HomeWorkEntitiesContext _db;
+
+        public ActorsRepository()
+        {
+            _db = new HomeWorkEntitiesContext();
+        }
+
         public Actors GetById(int id)
         {
             return _db.Actors.Find(id);
