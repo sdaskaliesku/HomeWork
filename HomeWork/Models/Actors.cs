@@ -2,7 +2,6 @@
 
 namespace HomeWork.Models
 {
-
     public class Actors
     {
         public Actors()

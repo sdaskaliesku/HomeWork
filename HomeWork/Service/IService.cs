@@ -9,6 +9,8 @@ namespace HomeWork.Service
         void Add(T t);
         void Update(T t);
         void Delete(T t);
+        void Delete(int id);
         IEnumerable<T> GetAll();
+        IEnumerable<T> GetByLambdaExpression(Func<T, bool> lambda);
     }
 }

@@ -13,7 +13,8 @@ namespace HomeWork
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
-            UnityConfig.RegisterComponents(); // Injecting dependecies
+            UnityConfig.RegisterComponents(); // Injecting dependecies for WebAPI
+            Bootstrapper.Initialise(); // Injecting dependecies
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

@@ -4,15 +4,19 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
+    @Scripts.Render("~/bundles/jquery")
+    @Styles.Render("~/Content/kendo/css")
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/kendo")
+
 </head>
 <body>
     <header>
         <div class="content-wrapper">
             <div class="float-left">
                 <p class="site-title">
-                    <a href="~/">ASP.NET Web API</a></p>
+                    <a href="~/">Cinema</a></p>
             </div>
             <div class="float-right">
                 <nav>
@@ -26,7 +30,6 @@
     </header>
     @RenderBody()
 
-    @Scripts.Render("~/bundles/jquery")
     @RenderSection("scripts", required: false)
 </body>
 </html>

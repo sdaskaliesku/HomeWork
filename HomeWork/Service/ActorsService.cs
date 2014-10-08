@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using HomeWork.Models;
 using HomeWork.Repository;
 
@@ -39,14 +41,26 @@ namespace HomeWork.Service
             _iActorsRepository.Delete(actor);
         }
 
+        public void Delete(int id)
+        {
+            Actors actor = _iActorsRepository.GetById(id);
+            _iActorsRepository.Delete(actor);
+        }
+
         public IEnumerable<Actors> GetAll()
         {
             return _iActorsRepository.GetAll();
         }
 
-        public IEnumerable<Actors> GetAllActors(Movies movies)
+        public IEnumerable<Actors> GetByLambdaExpression(Func<Actors, bool> lambda)
         {
-            return _iActorsRepository.GetAllActors(movies);
+            return _iActorsRepository.GetByLambdaExpression(lambda);
+        }
+
+        public IEnumerable<Actors> GetAllActorsByMovie(Movies movies)
+        {
+            Func<Actors, bool> lambda = a => a.Movies.First().Id == movies.Id;
+            return _iActorsRepository.GetByLambdaExpression(lambda);
         }
     }
 }

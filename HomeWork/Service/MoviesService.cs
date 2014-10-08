@@ -12,7 +12,7 @@ namespace HomeWork.Service
 
         public MoviesService(IMoviesRepository iMoviesRepository)
         {
-            this._iMoviesRepository = iMoviesRepository;
+            _iMoviesRepository = iMoviesRepository;
         }
 
         public void Dispose()
@@ -40,24 +40,38 @@ namespace HomeWork.Service
             _iMoviesRepository.Delete(movie);
         }
 
+        public void Delete(int id)
+        {
+            Movies movie = _iMoviesRepository.GetById(id);
+            _iMoviesRepository.Delete(movie);
+        }
+
         public IEnumerable<Movies> GetAll()
         {
             return _iMoviesRepository.GetAll();
         }
 
+        public IEnumerable<Movies> GetByLambdaExpression(Func<Movies, bool> lambda)
+        {
+            return _iMoviesRepository.GetByLambdaExpression(lambda);
+        }
+
         public IEnumerable<Movies> GetAllMoviesByGenre(Genres genre)
         {
-            return _iMoviesRepository.GetAllMoviesByGenre(genre);
+            Func<Movies, bool> lambda = m => m.GenreId == genre.Id;
+            return _iMoviesRepository.GetByLambdaExpression(lambda);
         }
 
         public IEnumerable<Movies> GetAllMoviesByTitle(string title)
         {
-            return _iMoviesRepository.GetAllMoviesByTitle(title);
+            Func<Movies, bool> lambda = m => m.Title == title;
+            return _iMoviesRepository.GetByLambdaExpression(lambda);
         }
 
         public IEnumerable<Movies> GetAllMoviesByYear(DateTime year)
         {
-            return _iMoviesRepository.GetAllMoviesByYear(year);
+            Func<Movies, bool> lambda = m => m.Year == year;
+            return _iMoviesRepository.GetByLambdaExpression(lambda);
         }
     }
 }

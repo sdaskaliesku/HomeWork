@@ -1,45 +1,93 @@
-﻿<div id="body">
-    <section class="featured">
-        <div class="content-wrapper">
-            <hgroup class="title">
-                <h1>Welcome to ASP.NET Web API!</h1>
-                <h2>Modify the code in this template to jump-start your ASP.NET Web API development.</h2>
-            </hgroup>
-            <p>
-                ASP.NET Web API allows you to expose your applications, data and services to the
-                web directly over HTTP.
-            </p>
-            <p>
-                To learn more about ASP.NET Web API visit the
-                <a href="http://go.microsoft.com/fwlink/?LinkID=238195" title="ASP.NET Web API Website">ASP.NET Web API Website</a>.
-                The page features <mark>videos, tutorials, and samples</mark> to help you get the most from ASP.NET Web API.
-                If you have any questions about ASP.NET Web API, visit
-                <a href="http://go.microsoft.com/fwlink/?LinkID=238196" title="ASP.NET Web API Forum">our forums</a>.
-            </p>
-        </div>
-    </section>
-    <section class="content-wrapper main-content clear-fix">
-        <h3>We suggest the following steps:</h3>
-        <ol class="round">
-            <li class="one">
-                <h5>Getting Started</h5>
-                ASP.NET Web API is a framework that makes it easy to build HTTP services that reach
-                a broad range of clients, including browsers and mobile devices. ASP.NET Web API
-                is an ideal platform for building RESTful applications on the .NET Framework.
-                <a href="http://go.microsoft.com/fwlink/?LinkId=245160">Learn more…</a>
-            </li>
+﻿@using Kendo.Mvc.UI
+<script src="/Scripts/MainPage.js"></script>
+<script src="/Scripts/kendo/kendo.aspnetmvc.min.js"></script>
+<link href="/Content/kendo/kendo.common.min.css" rel="stylesheet" />
+<link href="/Content/kendo/kendo.default.min.css" rel="stylesheet" />
+<link href="/Content/kendo/kendo.dataviz.min.css" rel="stylesheet" />
+<link href="/Content/kendo/kendo.dataviz.default.min.css" rel="stylesheet" />
+<script src="/Scripts/kendo/kendo.all.min.js"></script>
+@*<link href="~/Content/kendo/kendo.moonlight.min.css" rel="stylesheet" />*@
+<div id="body">
+    <section class="k-content">
+        <section class="featured">
+            
+            <div style="display: none">
+                <div id="GenresWindow">
+                    <div id="GenresModel">
+                        <div data-role="grid"
+                             data-scrollable="true"
+                             data-editable="inline"
+                             data-sortable="true"
+                             data-toolbar="['create']"
+                             data-columns="[
+                                 { field: 'Id', width: 50 },
+                                 { field: 'Name' },
+                                 { command: ['edit', 'destroy' ], width : 200, title: '&nbsp;'}
+                             ]"
+                             data-bind="source: GenresDataSource"
+                             style="width: 700px; height: 500px"></div>
+                    </div>
+                </div>
+            </div>
 
-            <li class="two">
-                <h5>Add NuGet packages and jump-start your coding</h5>
-                NuGet makes it easy to install and update free libraries and tools.
-                <a href="http://go.microsoft.com/fwlink/?LinkId=245161">Learn more…</a>
-            </li>
-            <li class="three">
-                <h5>Find Web Hosting</h5>
-                You can easily find a web hosting company that offers the right mix of features
-                and price for your applications.
-                <a href="http://go.microsoft.com/fwlink/?LinkId=245164">Learn more…</a>
-            </li>
-        </ol>
+            <div style="display: none">
+                <div id="ActorsWindow">
+                    <div id="ActorsModel">
+                        <div data-role="grid"
+                             data-scrollable="true"
+                             data-editable="inline"
+                             data-sortable="true"
+                             data-toolbar="['create']"
+                             data-columns="[
+                                 { 'field': 'Id', 'width': 50 },
+                                 { 'field': 'FirstName' },
+                                 { 'field': 'LastName' },
+                                 { 'field': 'Gender' },
+                                 { 'field': 'DateOfBirth' },
+                                 { 'command': ['edit', 'destroy' ], 'width' : 200, title: '&nbsp;'}
+                             ]"
+                             data-bind="source: ActorsDataSource"
+                             style="width: 700px; height: 500px"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: none">
+                <div id="MoviesWindow">
+                    <div id="MoviesModel">
+                        <div data-role="grid"
+                             data-scrollable="true"
+                             data-editable="inline"
+                             data-sortable="true"
+                             data-toolbar="['create']"
+                             data-columns="[
+                                 { 'field': 'Id', 'width': 50 },
+                                 { 'field': 'Title' },
+                                 { 'field': 'Year' },
+                                 { 'field': 'DurationInSeconds' },
+                                 { 'command': ['edit', 'destroy' ], 'width' : 200, title: '&nbsp;'}
+                             ]"
+                             data-bind="source: MoviesDataSource"
+                             style="width: 700px; height: 500px"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: none">
+                <div id="infoWindow">
+                    <div style="text-align: center" data-bind="text: message">
+                    </div>
+                </div>
+            </div>
+            <span id="popupNotification" data-bind="text: message"></span>
+            <div class="content-wrapper">
+                <div style="text-align: center">
+                    @(Html.Kendo().Button().Name("genresButton").HtmlAttributes(new { type = "button" }).Content("Genres")) <p />
+                    @(Html.Kendo().Button().Name("moviesButton").HtmlAttributes(new { type = "button" }).Content("Movies")) <p />
+                    @(Html.Kendo().Button().Name("actorsButton").HtmlAttributes(new { type = "button" }).Content("Actors"))
+                </div>
+            </div>
+
+        </section>
     </section>
 </div>

@@ -7,7 +7,7 @@ namespace HomeWork.Models
     {
         public Movies()
         {
-            Actors = new HashSet<Actors>();
+            ActorsList = new List<Actors>();
         }
 
         public int Id { get; set; }
@@ -15,9 +15,8 @@ namespace HomeWork.Models
         public System.DateTime Year { get; set; }
         public int DurationInSeconds { get; set; }
         public int GenreId { get; set; }
-
-        public virtual Genres Genres { get; set; }
-        public virtual ICollection<Actors> Actors { get; set; }
+        public virtual Genres Genre { get; set; }
+        public virtual ICollection<Actors> ActorsList { get; set; }
 
         public override string ToString()
         {

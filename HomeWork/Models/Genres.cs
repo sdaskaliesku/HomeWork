@@ -2,18 +2,17 @@
 
 namespace HomeWork.Models
 {
-
     public class Genres
     {
         public Genres()
         {
-            Movies = new HashSet<Movies>();
+            MoviesList = new List<Movies>();
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public virtual ICollection<Movies> Movies { get; set; }
+        public virtual ICollection<Movies> MoviesList { get; set; }
 
         public override string ToString()
         {

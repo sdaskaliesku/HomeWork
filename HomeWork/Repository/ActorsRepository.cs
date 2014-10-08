@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using HomeWork.Context;
 using HomeWork.Models;
@@ -22,32 +24,70 @@ namespace HomeWork.Repository
 
         public void Add(Actors actor)
         {
-            _db.Actors.Add(actor);
-            _db.SaveChanges();
+            try
+            {
+                _db.Actors.Add(actor);
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
+            }
         }
 
         public void Update(Actors actor)
         {
-            _db.Entry(actor).State = EntityState.Modified;
-            _db.SaveChanges();
+            try
+            {
+                _db.Entry(actor).State = EntityState.Modified;
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
+            }
         }
 
         public void Delete(Actors actor)
         {
-            Actors act = _db.Actors.Find(actor.Id);
-            _db.Actors.Remove(act);
-            _db.SaveChanges();
+            try
+            {
+                Actors act = _db.Actors.Find(actor.Id);
+                _db.Actors.Remove(act);
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
+            }
         }
 
         public IEnumerable<Actors> GetAll()
         {
-            return _db.Actors.ToList();
+            try
+            {
+                return _db.Actors.ToList();
+            }
+            catch (Exception e)
+            {
+                Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
+            }
+            return null;
         }
 
-        public IEnumerable<Actors> GetAllActors(Movies movies)
+        public IEnumerable<Actors> GetByLambdaExpression(Func<Actors, bool> lambda)
         {
-            return (_db.Actors.Where(a => a.Movies.First().Id == movies.Id)).ToList();
+            try
+            {
+                return (_db.Actors.Where(lambda)).ToList();
+            }
+            catch (Exception e)
+            {
+                Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
+            }
+            return null;
         }
+
 
         public void Dispose()
         {

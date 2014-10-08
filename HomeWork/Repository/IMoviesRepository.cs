@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using HomeWork.Models;
+﻿using HomeWork.Models;
 
 namespace HomeWork.Repository
 {
@@ -10,10 +8,10 @@ namespace HomeWork.Repository
         void AddMovie(Movies movie);
         void UpdateMovie(Movies movie);
         void DeleteMovie(Movies movie);
-        IEnumerable<Movies> GetAllMovies();*/
+        IEnumerable<Movies> GetAllMovies();
         IEnumerable<Movies> GetAllMoviesByGenre(Genres genre);
         IEnumerable<Movies> GetAllMoviesByTitle(String title);
-        IEnumerable<Movies> GetAllMoviesByYear(DateTime year);
+        IEnumerable<Movies> GetAllMoviesByYear(DateTime year);*/
 
     }
 }

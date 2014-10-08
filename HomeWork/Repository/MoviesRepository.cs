@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using HomeWork.Context;
 using HomeWork.Models;
@@ -18,46 +20,81 @@ namespace HomeWork.Repository
 
         public Movies GetById(int id)
         {
-            return _db.Movies.Find(id);
+            try
+            {
+                return _db.Movies.Find(id);
+            }
+            catch (Exception e)
+            {
+                Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
+            }
+            return null;
         }
 
         public void Add(Movies movie)
         {
-            _db.Movies.Add(movie);
-            _db.SaveChanges();
+            try
+            {
+                _db.Movies.Add(movie);
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
+            }
         }
 
         public void Update(Movies movie)
         {
-            _db.Entry(movie).State = EntityState.Modified;
-            _db.SaveChanges();
+            try
+            {
+                _db.Entry(movie).State = EntityState.Modified;
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
+            }
         }
 
         public void Delete(Movies movie)
         {
-            Movies movies = _db.Movies.Find(movie.Id);
-            _db.Movies.Remove(movies);
-            _db.SaveChanges();
+            try
+            {
+                Movies movies = _db.Movies.Find(movie.Id);
+                _db.Movies.Remove(movies);
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
+            }
         }
 
         public IEnumerable<Movies> GetAll()
         {
-            return _db.Movies.ToList();
+            try
+            {
+                return _db.Movies.ToList();
+            }
+            catch (Exception e)
+            {
+                Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
+            }
+            return null;
         }
 
-        public IEnumerable<Movies> GetAllMoviesByGenre(Genres genre)
+        public IEnumerable<Movies> GetByLambdaExpression(Func<Movies, bool> lambda)
         {
-            return (_db.Movies.Where(m => m.GenreId == genre.Id)).ToList();
-        }
-
-        public IEnumerable<Movies> GetAllMoviesByTitle(string title)
-        {
-            return (_db.Movies.Where(m => m.Title == title)).ToList();
-        }
-
-        public IEnumerable<Movies> GetAllMoviesByYear(System.DateTime year)
-        {
-            return (_db.Movies.Where(m => m.Year == year)).ToList();
+            try
+            {
+                return _db.Movies.Where(lambda).ToList();
+            }
+            catch (Exception e)
+            {
+                Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
+            }
+            return null;
         }
 
         public void Dispose()

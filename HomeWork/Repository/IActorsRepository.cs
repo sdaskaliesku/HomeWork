@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using HomeWork.Models;
+﻿using HomeWork.Models;
 
 namespace HomeWork.Repository
 {
@@ -10,6 +9,6 @@ namespace HomeWork.Repository
         void UpdateActor(Actors actor);
         void DeleteActor(Actors actor);
         IEnumerable<Actors> GetAllActors();*/
-        IEnumerable<Actors> GetAllActors(Movies movies);
+     //   IEnumerable<Actors> GetAllActors(Movies movies);
     }
 }

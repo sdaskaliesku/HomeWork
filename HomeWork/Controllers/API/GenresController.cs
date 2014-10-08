@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using HomeWork.Models;
 using HomeWork.Service;
@@ -16,15 +18,20 @@ namespace HomeWork.Controllers.API
         }
 
         // GET api/genres
-        public List<Genres> Get()
+        public IEnumerable<Genres> Get()
         {
-            return (List<Genres>) _iService.GetAll();
+            return _iService.GetAll();
+        }
+
+        public IEnumerable<Genres> Post()
+        {
+            return _iService.GetAll();
         }
 
         // GET api/genres?id=1
-        public Genres Get([FromUri] int id)
+        public string Get([FromUri] int id)
         {
-            return _iService.GetById(id);
+            return _iService.GetById(id).Name;
         }
 
     }

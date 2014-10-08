@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using HomeWork.Models;
 using HomeWork.Repository;
 
@@ -39,9 +40,20 @@ namespace HomeWork.Service
             _iGenresRepository.Delete(genre);
         }
 
+        public void Delete(int id)
+        {
+            Genres genre = _iGenresRepository.GetById(id);
+            _iGenresRepository.Delete(genre);
+        }
+
         public IEnumerable<Genres> GetAll()
         {
             return _iGenresRepository.GetAll();
+        }
+
+        public IEnumerable<Genres> GetByLambdaExpression(Func<Genres, bool> lambda)
+        {
+            return _iGenresRepository.GetByLambdaExpression(lambda);
         }
     }
 }

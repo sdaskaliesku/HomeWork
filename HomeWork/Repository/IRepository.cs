@@ -10,5 +10,6 @@ namespace HomeWork.Repository
         void Update(T t);
         void Delete(T t);
         IEnumerable<T> GetAll();
+        IEnumerable<T> GetByLambdaExpression(Func<T, bool> lambda);
     }
 }
