@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Diagnostics;
 using System.Linq;
 using HomeWork.Context;
 using HomeWork.Models;
@@ -19,81 +18,38 @@ namespace HomeWork.Repository
 
         public Genres GetById(int id)
         {
-            try
-            {
-                return _db.Genres.Find(id);
-            }
-            catch (Exception e)
-            {
-                Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
-            }
-            return null;
+            return _db.Genres.Find(id);
         }
 
         public void Add(Genres genre)
         {
-            try
-            {
-                _db.Genres.Add(genre);
-                _db.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
-            }
+            _db.Genres.Add(genre);
+            _db.SaveChanges();
         }
 
         public void Update(Genres genre)
         {
-            try
-            {
-                _db.Entry(genre).State = EntityState.Modified;
-                _db.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
-            }
+            _db.Entry(genre).State = EntityState.Modified;
+            _db.SaveChanges();
         }
 
         public void Delete(Genres genre)
         {
-            try
-            {
-                Genres genres = _db.Genres.Find(genre.Id);
-                _db.Genres.Remove(genres);
-                _db.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
-            }
+
+            Genres genres = _db.Genres.Find(genre.Id);
+            _db.Genres.Remove(genres);
+            _db.SaveChanges();
+
         }
 
         public IEnumerable<Genres> GetAll()
         {
-            try
-            {
-                return _db.Genres.ToList();
-            }
-            catch (Exception e)
-            {
-                Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
-            }
-            return null;
+            return _db.Genres.ToList();
         }
 
         public IEnumerable<Genres> GetByLambdaExpression(Func<Genres, bool> lambda)
         {
-            try
-            {
-                return _db.Genres.Where(lambda).ToList();
-            }
-            catch (Exception e)
-            {
-                Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
-            }
-            return null;
+            return _db.Genres.Where(lambda).ToList();
         }
 
         public void Dispose()

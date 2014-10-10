@@ -6,12 +6,15 @@ using System.Web.Mvc;
 using HomeWork.Models;
 using HomeWork.Service;
 using Kendo.Mvc.UI;
+using Newtonsoft.Json;
 
 namespace HomeWork.Controllers
 {
     public class ActorsController : Controller, ICrudController<Actors>
     {
         private readonly IActorsService _iActorsService;
+
+        private const string Result = "error";
 
         public ActorsController(IActorsService iActorsService)
         {
@@ -20,11 +23,9 @@ namespace HomeWork.Controllers
 
         public ActionResult Create(Actors actor)
         {
-            string result = "error";
             try
             {
                 _iActorsService.Add(actor);
-                result = "success";
             }
             catch (DbEntityValidationException e)
             {
@@ -40,22 +41,23 @@ namespace HomeWork.Controllers
             {
                 Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
             }
-            return Json(result, JsonRequestBehavior.AllowGet);
+            return Json(actor, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Read([DataSourceRequest] DataSourceRequest request)
+        public String Read([DataSourceRequest] DataSourceRequest request)
         {
             IEnumerable<Actors> actors = _iActorsService.GetAll();
-            return Json(actors, JsonRequestBehavior.AllowGet);
+            return JsonConvert.SerializeObject(actors, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
         }
 
         public ActionResult Update(Actors actor)
         {
-            string result = "error";
             try
             {
-                _iActorsService.Add(actor);
-                result = "success";
+                _iActorsService.Update(actor);
             }
             catch (DbEntityValidationException e)
             {
@@ -66,21 +68,25 @@ namespace HomeWork.Controllers
                         Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
                     }
                 }
+                return Json(Result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
                 Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
+                return Json(Result, JsonRequestBehavior.AllowGet);
             }
-            return Json(result, JsonRequestBehavior.AllowGet);
+            return Json(actor, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Destroy(Actors actor)
         {
-            string result = "error";
             try
             {
+                /*if (actor.MoviesList.Count > 0)
+                {
+                    return Json(Result, JsonRequestBehavior.AllowGet);
+                }*/
                 _iActorsService.Delete(actor);
-                result = "success";
             }
             catch (DbEntityValidationException e)
             {
@@ -91,12 +97,14 @@ namespace HomeWork.Controllers
                         Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
                     }
                 }
+                return Json(Result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
                 Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
+                return Json(Result, JsonRequestBehavior.AllowGet);
             }
-            return Json(result, JsonRequestBehavior.AllowGet);
+            return Json(actor, JsonRequestBehavior.AllowGet);
         }
     }
 }

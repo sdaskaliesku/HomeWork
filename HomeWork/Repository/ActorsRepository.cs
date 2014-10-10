@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Diagnostics;
 using System.Linq;
 using HomeWork.Context;
 using HomeWork.Models;
@@ -24,68 +23,33 @@ namespace HomeWork.Repository
 
         public void Add(Actors actor)
         {
-            try
-            {
-                _db.Actors.Add(actor);
-                _db.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
-            }
+            _db.Actors.Add(actor);
+            _db.SaveChanges();
         }
 
         public void Update(Actors actor)
         {
-            try
-            {
-                _db.Entry(actor).State = EntityState.Modified;
-                _db.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
-            }
+            _db.Entry(actor).State = EntityState.Modified;
+            _db.SaveChanges();
         }
 
         public void Delete(Actors actor)
         {
-            try
-            {
-                Actors act = _db.Actors.Find(actor.Id);
-                _db.Actors.Remove(act);
-                _db.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
-            }
+            Actors act = _db.Actors.Find(actor.Id);
+            _db.Actors.Remove(act);
+            _db.SaveChanges();
         }
 
         public IEnumerable<Actors> GetAll()
         {
-            try
-            {
-                return _db.Actors.ToList();
-            }
-            catch (Exception e)
-            {
-                Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
-            }
-            return null;
+            return _db.Actors.ToList();
         }
 
         public IEnumerable<Actors> GetByLambdaExpression(Func<Actors, bool> lambda)
         {
-            try
-            {
-                return (_db.Actors.Where(lambda)).ToList();
-            }
-            catch (Exception e)
-            {
-                Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
-            }
-            return null;
+
+            return (_db.Actors.Where(lambda)).ToList();
+
         }
 
 

@@ -59,7 +59,7 @@ namespace HomeWork.Service
 
         public IEnumerable<Actors> GetAllActorsByMovie(Movies movies)
         {
-            Func<Actors, bool> lambda = a => a.Movies.First().Id == movies.Id;
+            Func<Actors, bool> lambda = a => a.MoviesList.First().Id == movies.Id;
             return _iActorsRepository.GetByLambdaExpression(lambda);
         }
     }

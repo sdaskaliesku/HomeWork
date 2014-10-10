@@ -13,7 +13,7 @@ namespace HomeWork.Context
 
         public HomeWorkEntitiesContext()
         {
-            Configuration.ProxyCreationEnabled = false;
+            Database.SetInitializer<HomeWorkEntitiesContext>(null);
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -31,7 +31,10 @@ namespace HomeWork.Context
             modelBuilder.Entity<Movies>().Property(m => m.Year).IsRequired();
             modelBuilder.Entity<Movies>().Property(m => m.DurationInSeconds).IsRequired();
             modelBuilder.Entity<Movies>().Property(m => m.Year).IsRequired();
-            modelBuilder.Entity<Movies>().HasRequired<Genres>(s => s.Genre).WithMany(s => s.MoviesList).HasForeignKey(s => s.GenreId).WillCascadeOnDelete(false);
+            modelBuilder.Entity<Movies>().HasRequired(g => g.Genre)
+                .WithMany()
+                .HasForeignKey(movie => movie.GenreId)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Actors>().HasKey(a => a.Id);
             modelBuilder.Entity<Actors>().Property(a => a.FirstName).HasMaxLength(64).IsRequired();
@@ -40,7 +43,7 @@ namespace HomeWork.Context
             modelBuilder.Entity<Actors>().Property(a => a.DateOfBirth).IsRequired();
             modelBuilder.Entity<Movies>()
                 .HasMany(a => a.ActorsList)
-                .WithMany(m => m.Movies)
+                .WithMany(m => m.MoviesList)
                 .Map(mc =>
                 {
                     mc.ToTable("MoviesActors");

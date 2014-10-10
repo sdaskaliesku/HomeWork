@@ -20,9 +20,9 @@
                              data-sortable="true"
                              data-toolbar="['create']"
                              data-columns="[
-                                 { field: 'Id', width: 50 },
+                                 { field: 'Id'},
                                  { field: 'Name' },
-                                 { command: ['edit', 'destroy' ], width : 200, title: '&nbsp;'}
+                                 { command: ['edit', 'destroy' ], title: '&nbsp;'}
                              ]"
                              data-bind="source: GenresDataSource"
                              style="width: 700px; height: 500px"></div>
@@ -40,18 +40,18 @@
                              data-toolbar="['create']"
                              data-columns="[
                                  { 'field': 'Id', 'width': 50 },
-                                 { 'field': 'FirstName' },
-                                 { 'field': 'LastName' },
-                                 { 'field': 'Gender' },
-                                 { 'field': 'DateOfBirth' },
+                                 { 'field': 'FirstName', 'width': 100 },
+                                 { 'field': 'LastName', 'width': 100 },
+                                 { 'field': 'Gender', 'width': 70 },
+                                 { 'field': 'DateOfBirth', 'width': 150, format: '{0:dd.MM.yyyy}' },
                                  { 'command': ['edit', 'destroy' ], 'width' : 200, title: '&nbsp;'}
                              ]"
                              data-bind="source: ActorsDataSource"
-                             style="width: 700px; height: 500px"></div>
+                             style="height: 500px"></div>
                     </div>
                 </div>
             </div>
-
+            
             <div style="display: none">
                 <div id="MoviesWindow">
                     <div id="MoviesModel">
@@ -61,11 +61,12 @@
                              data-sortable="true"
                              data-toolbar="['create']"
                              data-columns="[
-                                 { 'field': 'Id', 'width': 50 },
-                                 { 'field': 'Title' },
-                                 { 'field': 'Year' },
-                                 { 'field': 'DurationInSeconds' },
-                                 { 'command': ['edit', 'destroy' ], 'width' : 200, title: '&nbsp;'}
+                                 { 'field': 'Id', 'width': '50px' },
+                                 { 'field': 'Title', 'width': '100px' },
+                                 { 'field': 'Year', 'width': '70px', format: '{0:yyyy}' },
+                                 { 'field': 'DurationString', title: 'Duration' },
+                                 { 'field': 'Genre.Name', title: 'Genre' },
+                                 { 'command': ['edit', 'destroy' ], 'width' : '200px', title: '&nbsp;'}
                              ]"
                              data-bind="source: MoviesDataSource"
                              style="width: 700px; height: 500px"></div>
@@ -80,6 +81,7 @@
                 </div>
             </div>
             <span id="popupNotification" data-bind="text: message"></span>
+
             <div class="content-wrapper">
                 <div style="text-align: center">
                     @(Html.Kendo().Button().Name("genresButton").HtmlAttributes(new { type = "button" }).Content("Genres")) <p />

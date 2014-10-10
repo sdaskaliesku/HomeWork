@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using HomeWork.Models;
 using HomeWork.Service;
 using Kendo.Mvc.UI;
+using Newtonsoft.Json;
 
 namespace HomeWork.Controllers
 {
@@ -13,6 +14,7 @@ namespace HomeWork.Controllers
     {
         private readonly IGenresService _iGenresService;
 
+        private const string Result = "error";
         public GenresController(IGenresService iGenresService)
         {
             _iGenresService = iGenresService;
@@ -20,11 +22,9 @@ namespace HomeWork.Controllers
 
         public ActionResult Create(Genres genre)
         {
-            string result = "error";
             try
             {
                 _iGenresService.Add(genre);
-                result = "success";
             }
             catch (DbEntityValidationException e)
             {
@@ -32,30 +32,34 @@ namespace HomeWork.Controllers
                 {
                     foreach (var validationError in validationErrors.ValidationErrors)
                     {
-                        Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
+                        Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName,
+                            validationError.ErrorMessage);
                     }
                 }
+                return Json(Result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
                 Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
+                return Json(Result, JsonRequestBehavior.AllowGet);
             }
-            return Json(result, JsonRequestBehavior.AllowGet);
+            return Json(genre, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Read([DataSourceRequest] DataSourceRequest request)
+        public string Read([DataSourceRequest] DataSourceRequest request)
         {
             IEnumerable<Genres> genres = _iGenresService.GetAll();
-            return Json(genres, JsonRequestBehavior.AllowGet);
+            return JsonConvert.SerializeObject(genres, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
         }
 
         public ActionResult Update(Genres genre)
         {
-            string result = "error";
             try
             {
                 _iGenresService.Update(genre);
-                result = "success";
             }
             catch (DbEntityValidationException e)
             {
@@ -63,24 +67,25 @@ namespace HomeWork.Controllers
                 {
                     foreach (var validationError in validationErrors.ValidationErrors)
                     {
-                        Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
+                        Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName,
+                            validationError.ErrorMessage);
                     }
                 }
+                return Json(Result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
                 Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
+                return Json(Result, JsonRequestBehavior.AllowGet);
             }
-            return Json(result, JsonRequestBehavior.AllowGet);
+            return Json(genre, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Destroy(Genres genre)
         {
-            string result = "error";
             try
             {
                 _iGenresService.Delete(genre);
-                result = "success";
             }
             catch (DbEntityValidationException e)
             {
@@ -88,15 +93,18 @@ namespace HomeWork.Controllers
                 {
                     foreach (var validationError in validationErrors.ValidationErrors)
                     {
-                        Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
+                        Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName,
+                            validationError.ErrorMessage);
                     }
                 }
+                return Json(Result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
                 Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
+                return Json(Result, JsonRequestBehavior.AllowGet);
             }
-            return Json(result, JsonRequestBehavior.AllowGet);
+            return Json(genre, JsonRequestBehavior.AllowGet);
         }
     }
 }
