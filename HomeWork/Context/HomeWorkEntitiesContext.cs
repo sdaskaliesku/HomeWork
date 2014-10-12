@@ -18,9 +18,6 @@ namespace HomeWork.Context
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
 
             modelBuilder.Entity<Genres>().HasKey(g => g.Id);
@@ -50,6 +47,14 @@ namespace HomeWork.Context
                     mc.MapLeftKey("MovieId");
                     mc.MapRightKey("ActorId");
                 });
+
+            // prevent cycle reference
+            /*modelBuilder.Entity<Movies>()
+                .HasRequired(x => x.ActorsList)
+                .WithMany()
+                .WillCascadeOnDelete(false);*/
+
+            base.OnModelCreating(modelBuilder);
 
         }
     }

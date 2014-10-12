@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.Web.Mvc;
 using HomeWork.Models;
@@ -20,32 +19,24 @@ namespace HomeWork.Controllers
             _iMoviesService = iMoviesService;
         }
 
-        public ActionResult Create(Movies movie)
+        public String Create(Movies movie)
         {
             try
             {
                 _iMoviesService.Add(movie);
             }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var validationErrors in e.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
-                    }
-                }
-                return Json(Result, JsonRequestBehavior.AllowGet);
-            }
             catch (Exception e)
             {
                 Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
-                return Json(Result, JsonRequestBehavior.AllowGet);
+                return JsonConvert.SerializeObject(Result);
             }
-            return Json(movie, JsonRequestBehavior.AllowGet);
+            return JsonConvert.SerializeObject(movie, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
         }
 
-        public string Read([DataSourceRequest] DataSourceRequest request)
+        public String Read([DataSourceRequest] DataSourceRequest request)
         {
             IEnumerable<Movies> movies = _iMoviesService.GetAll();
             return JsonConvert.SerializeObject(movies, new JsonSerializerSettings
@@ -54,54 +45,38 @@ namespace HomeWork.Controllers
             });
         }
 
-        public ActionResult Update(Movies movie)
+        public String Update(Movies movie)
         {
             try
             {
                 _iMoviesService.Update(movie);
             }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var validationErrors in e.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
-                    }
-                }
-                return Json(Result, JsonRequestBehavior.AllowGet);
-            }
             catch (Exception e)
             {
                 Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
-                return Json(Result, JsonRequestBehavior.AllowGet);
+                return JsonConvert.SerializeObject(Result);
             }
-            return Json(movie, JsonRequestBehavior.AllowGet);
+            return JsonConvert.SerializeObject(movie, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
         }
 
-        public ActionResult Destroy(Movies movie)
+        public String Destroy(Movies movie)
         {
             try
             {
-                _iMoviesService.Delete(movie);
-            }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var validationErrors in e.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
-                    }
-                }
-                return Json(Result, JsonRequestBehavior.AllowGet);
+                _iMoviesService.Delete(_iMoviesService.GetById(movie.Id));
             }
             catch (Exception e)
             {
                 Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
-                return Json(Result, JsonRequestBehavior.AllowGet);
+                return JsonConvert.SerializeObject(Result);
             }
-            return Json(movie, JsonRequestBehavior.AllowGet);
+            return JsonConvert.SerializeObject(movie, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
         }
     }
 }

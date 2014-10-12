@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.Web.Mvc;
 using HomeWork.Models;
@@ -20,33 +19,21 @@ namespace HomeWork.Controllers
             _iGenresService = iGenresService;
         }
 
-        public ActionResult Create(Genres genre)
+        public String Create(Genres genre)
         {
             try
             {
                 _iGenresService.Add(genre);
             }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var validationErrors in e.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName,
-                            validationError.ErrorMessage);
-                    }
-                }
-                return Json(Result, JsonRequestBehavior.AllowGet);
-            }
             catch (Exception e)
             {
                 Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
-                return Json(Result, JsonRequestBehavior.AllowGet);
+                return JsonConvert.SerializeObject(Result);
             }
-            return Json(genre, JsonRequestBehavior.AllowGet);
+            return JsonConvert.SerializeObject(genre);
         }
 
-        public string Read([DataSourceRequest] DataSourceRequest request)
+        public String Read([DataSourceRequest] DataSourceRequest request)
         {
             IEnumerable<Genres> genres = _iGenresService.GetAll();
             return JsonConvert.SerializeObject(genres, new JsonSerializerSettings
@@ -55,56 +42,32 @@ namespace HomeWork.Controllers
             });
         }
 
-        public ActionResult Update(Genres genre)
+        public String Update(Genres genre)
         {
             try
             {
                 _iGenresService.Update(genre);
             }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var validationErrors in e.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName,
-                            validationError.ErrorMessage);
-                    }
-                }
-                return Json(Result, JsonRequestBehavior.AllowGet);
-            }
             catch (Exception e)
             {
                 Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
-                return Json(Result, JsonRequestBehavior.AllowGet);
+                return JsonConvert.SerializeObject(Result);
             }
-            return Json(genre, JsonRequestBehavior.AllowGet);
+            return JsonConvert.SerializeObject(genre);
         }
 
-        public ActionResult Destroy(Genres genre)
+        public String Destroy(Genres genre)
         {
             try
             {
                 _iGenresService.Delete(genre);
             }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var validationErrors in e.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName,
-                            validationError.ErrorMessage);
-                    }
-                }
-                return Json(Result, JsonRequestBehavior.AllowGet);
-            }
             catch (Exception e)
             {
                 Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
-                return Json(Result, JsonRequestBehavior.AllowGet);
+                return JsonConvert.SerializeObject(Result);
             }
-            return Json(genre, JsonRequestBehavior.AllowGet);
+            return JsonConvert.SerializeObject(genre);
         }
     }
 }

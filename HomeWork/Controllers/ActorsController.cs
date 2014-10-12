@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.Web.Mvc;
 using HomeWork.Models;
@@ -21,27 +20,18 @@ namespace HomeWork.Controllers
             _iActorsService = iActorsService;
         }
 
-        public ActionResult Create(Actors actor)
+        public String Create(Actors actor)
         {
             try
             {
                 _iActorsService.Add(actor);
             }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var validationErrors in e.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
-                    }
-                }
-            }
             catch (Exception e)
             {
                 Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
+                return JsonConvert.SerializeObject(Result);
             }
-            return Json(actor, JsonRequestBehavior.AllowGet);
+            return JsonConvert.SerializeObject(actor);
         }
 
         public String Read([DataSourceRequest] DataSourceRequest request)
@@ -53,58 +43,32 @@ namespace HomeWork.Controllers
             });
         }
 
-        public ActionResult Update(Actors actor)
+        public String Update(Actors actor)
         {
             try
             {
                 _iActorsService.Update(actor);
             }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var validationErrors in e.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
-                    }
-                }
-                return Json(Result, JsonRequestBehavior.AllowGet);
-            }
             catch (Exception e)
             {
                 Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
-                return Json(Result, JsonRequestBehavior.AllowGet);
+                return JsonConvert.SerializeObject(Result);
             }
-            return Json(actor, JsonRequestBehavior.AllowGet);
+            return JsonConvert.SerializeObject(actor);
         }
 
-        public ActionResult Destroy(Actors actor)
+        public String Destroy(Actors actor)
         {
             try
             {
-                /*if (actor.MoviesList.Count > 0)
-                {
-                    return Json(Result, JsonRequestBehavior.AllowGet);
-                }*/
                 _iActorsService.Delete(actor);
-            }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var validationErrors in e.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
-                    }
-                }
-                return Json(Result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
                 Trace.TraceInformation("Message: {0} StackTrace: {1}", e.Message, e.StackTrace);
-                return Json(Result, JsonRequestBehavior.AllowGet);
+                return JsonConvert.SerializeObject(Result);
             }
-            return Json(actor, JsonRequestBehavior.AllowGet);
+            return JsonConvert.SerializeObject(actor);
         }
     }
 }

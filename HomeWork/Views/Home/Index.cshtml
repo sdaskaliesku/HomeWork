@@ -5,8 +5,9 @@
 <link href="/Content/kendo/kendo.default.min.css" rel="stylesheet" />
 <link href="/Content/kendo/kendo.dataviz.min.css" rel="stylesheet" />
 <link href="/Content/kendo/kendo.dataviz.default.min.css" rel="stylesheet" />
+<link href="/Content/kendo/kendo.moonlight.min.css" rel="stylesheet" />
 <script src="/Scripts/kendo/kendo.all.min.js"></script>
-@*<link href="~/Content/kendo/kendo.moonlight.min.css" rel="stylesheet" />*@
+
 <div id="body">
     <section class="k-content">
         <section class="featured">
@@ -15,17 +16,17 @@
                 <div id="GenresWindow">
                     <div id="GenresModel">
                         <div data-role="grid"
-                             data-scrollable="true"
-                             data-editable="inline"
+                             data-filterable="true"
                              data-sortable="true"
-                             data-toolbar="['create']"
+                             data-editable="inline"
+                             data-toolbar=" ['create']"
                              data-columns="[
-                                 { field: 'Id'},
+                                 { field: 'Id', width: 70},
                                  { field: 'Name' },
-                                 { command: ['edit', 'destroy' ], title: '&nbsp;'}
+                                 { command: ['edit', 'destroy' ], title: '&nbsp;', width: 200}
                              ]"
                              data-bind="source: GenresDataSource"
-                             style="width: 700px; height: 500px"></div>
+                             style="height: 500px;"></div>
                     </div>
                 </div>
             </div>
@@ -34,16 +35,17 @@
                 <div id="ActorsWindow">
                     <div id="ActorsModel">
                         <div data-role="grid"
-                             data-scrollable="true"
-                             data-editable="inline"
                              data-sortable="true"
+                             data-editable="inline"
+                             data-filterable="true"
                              data-toolbar="['create']"
                              data-columns="[
-                                 { 'field': 'Id', 'width': 50 },
-                                 { 'field': 'FirstName', 'width': 100 },
-                                 { 'field': 'LastName', 'width': 100 },
-                                 { 'field': 'Gender', 'width': 70 },
+                                 { 'field': 'Id', 'width': 70 },
+                                 { 'field': 'FirstName', title: 'First name', 'width': 150 },
+                                 { 'field': 'LastName', title: 'Last name', 'width': 150 },
+                                 { 'field': 'Gender', 'width': 120, template: '#= getGender(Gender) #' },
                                  { 'field': 'DateOfBirth', 'width': 150, format: '{0:dd.MM.yyyy}' },
+                                 { 'field': 'MoviesList', 'width': 150, template: movieDisplay },
                                  { 'command': ['edit', 'destroy' ], 'width' : 200, title: '&nbsp;'}
                              ]"
                              data-bind="source: ActorsDataSource"
@@ -56,20 +58,22 @@
                 <div id="MoviesWindow">
                     <div id="MoviesModel">
                         <div data-role="grid"
-                             data-scrollable="true"
-                             data-editable="inline"
+                             data-editable="popup"
                              data-sortable="true"
+                             data-filterable="true"
                              data-toolbar="['create']"
-                             data-columns="[
-                                 { 'field': 'Id', 'width': '50px' },
-                                 { 'field': 'Title', 'width': '100px' },
-                                 { 'field': 'Year', 'width': '70px', format: '{0:yyyy}' },
-                                 { 'field': 'DurationString', title: 'Duration' },
-                                 { 'field': 'Genre.Name', title: 'Genre' },
-                                 { 'command': ['edit', 'destroy' ], 'width' : '200px', title: '&nbsp;'}
-                             ]"
+                             data-columns='[
+                                 { field: "Id", width: 70 },
+                                 { field: "Title", width: 100 },
+                                 { field: "Year", width: 100, format: "{0:yyyy}" },
+                                 { field: "DurationInSeconds", title: "Duration", width: 120, template: "#= getDurationHHMMSS(DurationInSeconds) #" },
+                                 { field: "GenreId", width: 100, title: "Genre", values:  genresValues() },
+                                 { field: "ActorsList", width: 200, title: "Actors", values:  actorsValues(), template: actorsDisplay, editor: actorsEditor },
+                                 { command: ["edit", "destroy" ], width : 200, title: "&nbsp;"}
+                             ]'
                              data-bind="source: MoviesDataSource"
-                             style="width: 700px; height: 500px"></div>
+                             style="height: 500px"></div>
+                        
                     </div>
                 </div>
             </div>
@@ -81,14 +85,16 @@
                 </div>
             </div>
             <span id="popupNotification" data-bind="text: message"></span>
-
-            <div class="content-wrapper">
-                <div style="text-align: center">
-                    @(Html.Kendo().Button().Name("genresButton").HtmlAttributes(new { type = "button" }).Content("Genres")) <p />
-                    @(Html.Kendo().Button().Name("moviesButton").HtmlAttributes(new { type = "button" }).Content("Movies")) <p />
-                    @(Html.Kendo().Button().Name("actorsButton").HtmlAttributes(new { type = "button" }).Content("Actors"))
-                </div>
-            </div>
+            @(Html.Kendo().Menu()
+            .Name("Menu")
+            .Items(items =>
+            {
+                items.Add().Text("Home").Action("Index", "Home");
+                items.Add().Text("Genres").HtmlAttributes(new {@id = "genresButton"});
+                items.Add().Text("Actors").HtmlAttributes(new {@id = "actorsButton"});
+                items.Add().Text("Movies").HtmlAttributes(new {@id = "moviesButton"});
+            })
+            )
 
         </section>
     </section>

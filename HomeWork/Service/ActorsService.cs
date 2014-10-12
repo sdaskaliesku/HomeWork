@@ -57,10 +57,30 @@ namespace HomeWork.Service
             return _iActorsRepository.GetByLambdaExpression(lambda);
         }
 
-        public IEnumerable<Actors> GetAllActorsByMovie(Movies movies)
+        public IEnumerable<Actors> GetAllActorsByGender(bool gender)
         {
-            Func<Actors, bool> lambda = a => a.MoviesList.First().Id == movies.Id;
+            Func<Actors, bool> lambda = a => a.Gender == gender;
             return _iActorsRepository.GetByLambdaExpression(lambda);
+        }
+
+        public IEnumerable<Actors> GetAllActorsByLastName(String lastName)
+        {
+            Func<Actors, bool> lambda = a => a.LastName.ToUpper().Equals(lastName.ToUpper());
+            return _iActorsRepository.GetByLambdaExpression(lambda);
+        }
+
+        public IEnumerable<Actors> GetAllActorsOlderThen(int age)
+        {
+            Func<Actors, bool> lambda = a => GetAge(a.DateOfBirth) >= age;
+            return _iActorsRepository.GetByLambdaExpression(lambda);
+        }
+
+        private static int GetAge(DateTime birthDate)
+        {
+            DateTime today = DateTime.Today;
+            int age = today.Year - birthDate.Year;
+            if (birthDate > today.AddYears(-age)) age--;
+            return age;
         }
     }
 }

@@ -56,9 +56,9 @@ namespace HomeWork.Service
             return _iMoviesRepository.GetByLambdaExpression(lambda);
         }
 
-        public IEnumerable<Movies> GetAllMoviesByGenre(Genres genre)
+        public IEnumerable<Movies> GetAllMoviesByGenre(string genre)
         {
-            Func<Movies, bool> lambda = m => m.GenreId == genre.Id;
+            Func<Movies, bool> lambda = m => m.Genre.Name.ToUpper().Equals(genre.ToUpper());
             return _iMoviesRepository.GetByLambdaExpression(lambda);
         }
 
@@ -68,9 +68,9 @@ namespace HomeWork.Service
             return _iMoviesRepository.GetByLambdaExpression(lambda);
         }
 
-        public IEnumerable<Movies> GetAllMoviesByYear(DateTime year)
+        public IEnumerable<Movies> GetAllMoviesByYear(int year)
         {
-            Func<Movies, bool> lambda = m => m.Year == year;
+            Func<Movies, bool> lambda = m => m.Year.Year == year;
             return _iMoviesRepository.GetByLambdaExpression(lambda);
         }
     }

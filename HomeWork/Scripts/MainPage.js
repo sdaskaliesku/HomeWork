@@ -11,8 +11,8 @@
             pinned: true,
             resizable: true,
             title: title,
-            width: 720,
-            height: 700
+            width: 1000,
+            height: 550
         });
         var viewModel = null;
         if (title === 'Genres') {
@@ -53,16 +53,15 @@
             GenresDataSource: new kendo.data.DataSource({
                 schema: {
                     data: function(data) {
-                        if (data === 'error') {
+                        if (data === '"error"') {
                             infoViewModel(failMessage);
-                            showNotification(failMessage, data);
-                            actorsViewModel(title);
+                            showNotification(failMessage, 'error');
                         } else {
                             showNotification(successMessage, success);
                         }
                         return data;
                     },
-                    total: function(data) {
+                    total: function (data) {
                         return data['odata.count'];
                     },
                     model: {
@@ -109,11 +108,10 @@
         var viewModel = kendo.observable({
             ActorsDataSource: new kendo.data.DataSource({
                 schema: {
-                    data: function(data) {
-                        if (data === 'error') {
+                    data: function (data) {
+                        if (data == "error") {
                             infoViewModel(failMessage);
                             showNotification(failMessage, data);
-                            actorsViewModel(title);
                         } else {
                             showNotification(successMessage, success);
                         }
@@ -129,7 +127,8 @@
                             FirstName: { validation: { required: true }, type: 'string' },
                             LastName: { validation: { required: true }, type: 'string' },
                             Gender: { validation: { required: false }, type: 'boolean' },
-                            DateOfBirth: { validation: { required: true }, type: 'date', format: '{0:dd.MM.yyyy}' }
+                            DateOfBirth: { validation: { required: true }, type: 'date', format: '{0:dd.MM.yyyy}' },
+                            MoviesList: { editable: false, nullable: true }
                         }
                     }
                 },
@@ -161,21 +160,22 @@
         return viewModel;
     }
 
+    //TODO: Bug with actors: click "Edit" button - there are not shown chosen actors. 
+    //After submitting new actors list, they are shown as 'null', need to reload MovieWindow.
     function moviesViewModel(title) {
         var failMessage = 'Something went wrong.';
         var viewModel = kendo.observable({
             MoviesDataSource: new kendo.data.DataSource({
-                data: function (data) {
-                    if (data === 'error') {
+                data: function(data) {
+                    if (data == 'error') {
                         infoViewModel(failMessage);
                         showNotification(failMessage, data);
-                        actorsViewModel(title);
                     } else {
                         showNotification(successMessage, success);
                     }
                     return data;
                 },
-                total: function (data) {
+                total: function(data) {
                     return data['odata.count'];
                 },
                 schema: {
@@ -185,25 +185,26 @@
                             Id: { editable: false, nullable: true, type: 'number' },
                             Title: { validation: { required: true }, type: 'string' },
                             Year: { validation: { required: true }, type: 'date', format: '{0:yyyy}' },
-                            DurationString: { validation: { required: true }, type: 'string' },
-                            Genre: { validation: { required: true } }
+                            DurationInSeconds: { validation: { required: true }, type: 'number' },
+                            GenreId: { validation: { required: true } },
+                            ActorsList: {}
                         }
                     }
                 },
                 batch: false,
                 transport: {
-                    create: function (options) {
+                    create: function(options) {
                         options.data.Year = convertDate(options.data.Year);
                         action(title + "/Create", options);
                     },
-                    read: function (options) {
+                    read: function(options) {
                         action(title + "/Read", options);
                     },
-                    update: function (options) {
+                    update: function(options) {
                         options.data.Year = convertDate(options.data.Year);
                         action(title + "/Update", options);
                     },
-                    destroy: function (options) {
+                    destroy: function(options) {
                         action(title + "/Destroy", options);
                     },
                     parameterMap: function(options, operation) {
@@ -243,10 +244,6 @@
         popupNotification.show(kendo.toString(d, 'HH:MM:ss') + " " + text, type);
     }
 
-    function checkDate(day) {
-        return day.length < 2 ? '0' + day : day;
-    }
-
     function convertDate(date) {
         var newDate = new Date(date);
         return checkDate(newDate.getDate()) + '.' + checkDate(newDate.getMonth() + 1) + '.' + newDate.getFullYear() + ' 0:00:00';
@@ -265,3 +262,89 @@
     }
 
 });
+
+function checkDate(day) {
+    return Number(day) < 10 ? '0' + day : day;
+}
+
+function postRequest(controller) {
+    var result = null;
+    $.ajax({
+        url: controller + "/Read",
+        async: false,
+        dataType: "json",
+        type: "post",
+        success: function (response) {
+            result = response;
+        }
+    });
+    return result;
+}
+
+function genresValues() {
+    var data = [];
+    var response = postRequest('Genres');
+    for (var i = 0 ; i < response.length; i++) {
+        data.push({ value: response[i].Id, text: response[i].Name });
+    }
+    return data;
+}
+
+function actorsValues() {
+    var data = [];
+    var response = postRequest('Actors');
+    for (var i = 0 ; i < response.length; i++) {
+        data.push({ id: response[i].Id, text: response[i].FullName });
+    }
+    return data;
+}
+
+function actorsDisplay(parameters) {
+    var result = '';
+    var actors = parameters.ActorsList;
+    for (var i = 0; i < actors.length; i++) {
+        result += actors[i].FirstName + ' ' + actors[i].LastName;
+        if (i != actors.length - 1) {
+            result += ', ';
+        }
+    }
+    return result;
+}
+
+function movieDisplay(parameters) {
+    var result = '';
+    var movies = parameters.MoviesList;
+    for (var i = 0; i < movies.length; i++) {
+        result += movies[i].Title;
+        if (i != movies.length - 1) {
+            result += ', ';
+        }
+    }
+    return result;
+}
+
+function actorsEditor(container, options) {
+    $('<input data-bind="value:' + options.field + '"/>')
+        .appendTo(container)
+        .kendoMultiSelect({
+            dataTextField: "text",
+            dataValueField: "id",
+            suggest: true,
+            dataSource: actorsValues()
+        });
+}
+
+function getGender(param) {
+    if (param) {
+        return "Male";
+    } else {
+        return "Female";
+    }
+}
+
+function getDurationHHMMSS(time) {
+    var hours = parseInt(Number(time) / 3600);
+    var minutes = parseInt((Number(time) / 60) % 60);
+    var seconds = parseInt(Number(time) % 60);
+    return checkDate(hours) + ":" + checkDate(minutes) + ":" + checkDate(seconds);
+}

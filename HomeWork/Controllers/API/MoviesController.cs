@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Web.Http;
 using HomeWork.Models;
 using HomeWork.Service;
+using Newtonsoft.Json;
 
 namespace HomeWork.Controllers.API
 {
@@ -19,27 +19,40 @@ namespace HomeWork.Controllers.API
         }
 
         // GET api/movies/
-        public List<Movies> Get()
+        public String Get()
         {
-            return (List<Movies>)_iMoviesService.GetAll();
+            return JsonConvert.SerializeObject(_iMoviesService.GetAll(), new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+
         }
 
         // GET api/movies?year=2014
-        public List<Movies> Get([FromUri] DateTime year)
+        public String GetYear([FromUri] int year)
         {
-            return (List<Movies>)_iMoviesService.GetAllMoviesByYear(year);
+            return JsonConvert.SerializeObject(_iMoviesService.GetAllMoviesByYear(year), new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
         }
 
         // GET api/movies?title=black
-        public List<Movies> Get([FromUri] string title)
+        public String GetTitle([FromUri] String title)
         {
-            return (List<Movies>)_iMoviesService.GetAllMoviesByTitle(title);
+            return JsonConvert.SerializeObject(_iMoviesService.GetAllMoviesByTitle(title), new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
         }
 
         // GET api/movies?genre=action
-        public List<Movies> Get([FromUri] Genres genre)
+        public String GetGenre([FromUri] String genre)
         {
-            return (List<Movies>)_iMoviesService.GetAllMoviesByGenre(genre);
+            return JsonConvert.SerializeObject(_iMoviesService.GetAllMoviesByGenre(genre), new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
         }
     }
 }

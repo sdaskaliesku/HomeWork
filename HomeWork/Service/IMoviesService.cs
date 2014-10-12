@@ -6,8 +6,8 @@ namespace HomeWork.Service
 {
     public interface IMoviesService : IService<Movies>
     {
-        IEnumerable<Movies> GetAllMoviesByGenre(Genres genre);
+        IEnumerable<Movies> GetAllMoviesByGenre(String genre);
         IEnumerable<Movies> GetAllMoviesByTitle(String title);
-        IEnumerable<Movies> GetAllMoviesByYear(DateTime year);
+        IEnumerable<Movies> GetAllMoviesByYear(int year);
     }
 }
