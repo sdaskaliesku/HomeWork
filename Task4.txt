@@ -1,0 +1,21 @@
+~/api/genres
+SELECT * FROM [HomeWork.Context.HomeWorkEntitiesContext].[dbo].[Actors]
+
+~/api/movies?year=2014
+SELECT * FROM [HomeWork.Context.HomeWorkEntitiesContext].[dbo].[Movies] Where year([Movies].Year) = 2014
+
+~/api/movies?genre=action
+SELECT m.Title, year(m.Year) as Year, m.DurationInSeconds, g.Name as 'Genre Name' FROM [Movies] m INNER JOIN [Genres] g ON m.GenreId = g.Id Where g.Name = 'action'
+
+~/api/movies?title=black
+SELECT * FROM [HomeWork.Context.HomeWorkEntitiesContext].[dbo].[Movies] Where [Movies].Title = 'black'
+
+~/api/actors?lastName=Smith
+SELECT * FROM [HomeWork.Context.HomeWorkEntitiesContext].[dbo].[Actors] Where [Actors].LastName = 'Smith'
+
+~/api/actors?olderThan=30
+Select * From (Select Id, Floor(DateDiff(d, [Actors].DateOfBirth, GetDate()) / 365.25) As Age From [Actors]) As Age
+Where Age > 30
+
+~/api/actors?gender=1
+Select * From [Actors] WHERE Gender = 1

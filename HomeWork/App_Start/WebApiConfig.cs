@@ -1,4 +1,6 @@
-﻿using System.Net.Http.Headers;
+﻿using System;
+using System.Net.Http.Formatting;
+using System.Net.Http.Headers;
 using System.Web.Http;
 
 namespace HomeWork
@@ -13,15 +15,23 @@ namespace HomeWork
                 defaults: new { id = RouteParameter.Optional }
             );
 
-            // Uncomment the following line of code to enable query support for actions with an IQueryable or IQueryable<T> return type.
-            // To avoid processing unexpected or malicious queries, use the validation settings on QueryableAttribute to validate incoming queries.
-            // For more information, visit http://go.microsoft.com/fwlink/?LinkId=279712.
-            //config.EnableQuerySupport();
-            config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json"));
-            //config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
-            // To disable tracing in your application, please comment out or remove the following line of code
-            // For more information, refer to: http://www.asp.net/web-api
+            //config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json"));
+            config.Formatters.Add(new BrowserJsonFormatter());
             config.EnableSystemDiagnosticsTracing();
+        }
+    }
+
+    public class BrowserJsonFormatter : JsonMediaTypeFormatter
+    {
+        public BrowserJsonFormatter()
+        {
+            this.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
+        }
+
+        public override void SetDefaultContentHeaders(Type type, HttpContentHeaders headers, MediaTypeHeaderValue mediaType)
+        {
+            base.SetDefaultContentHeaders(type, headers, mediaType);
+            headers.ContentType = new MediaTypeHeaderValue("application/json");
         }
     }
 }
