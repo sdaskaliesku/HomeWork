@@ -74,22 +74,17 @@
                 },
                 batch: false,
                 transport: {
-                    create: {
-                        url: title + "/Create",
-                        type: "post"
+                    create: function (options) {
+                        action(title + "/Create", options);
                     },
-                    read: {
-                        url: title + "/Read",
-                        dataType: "json",
-                        type: "post"
+                    read: function (options) {
+                        action(title + "/Read", options);
                     },
-                    update: {
-                        url: title + "/Update",
-                        type: "post"
+                    update: function (options) {
+                        action(title + "/Update", options);
                     },
-                    destroy: {
-                        url: title + "/Destroy",
-                        type: "post"
+                    destroy: function (options) {
+                        action(title + "/Destroy", options);
                     },
                     parameterMap: function(options, operation) {
                         if (operation !== "read" && options.models) {
@@ -128,7 +123,7 @@
                             LastName: { validation: { required: true }, type: 'string' },
                             Gender: { validation: { required: false }, type: 'boolean' },
                             DateOfBirth: { validation: { required: true }, type: 'date', format: '{0:dd.MM.yyyy}' },
-                            MoviesList: { editable: false, nullable: true }
+                            MoviesList: { validation: { required: false }, editable: false, nullable: true }
                         }
                     }
                 },
@@ -187,7 +182,7 @@
                             Year: { validation: { required: true }, type: 'date', format: '{0:yyyy}' },
                             DurationInSeconds: { validation: { required: true }, type: 'number' },
                             GenreId: { validation: { required: true } },
-                            ActorsList: {}
+                            ActorsList: { validation: { required: false } }
                         }
                     }
                 },
@@ -314,10 +309,14 @@ function actorsDisplay(parameters) {
 function movieDisplay(parameters) {
     var result = '';
     var movies = parameters.MoviesList;
-    for (var i = 0; i < movies.length; i++) {
-        result += movies[i].Title;
-        if (i != movies.length - 1) {
-            result += ', ';
+    if (movies != null) {
+        for (var i = 0; i < movies.length; i++) {
+            if (movies[i] != null) {
+                result += movies[i].Title;
+                if (i != movies.length - 1) {
+                    result += ', ';
+                }
+            }
         }
     }
     return result;
